@@ -1,7 +1,7 @@
 # RPM Spec file for esp-sync
 # Save this as esp-sync.spec
 
-Name:           esp-sync
+Name:           rpmostree-espsync.spec
 Version:        0.1
 Release:        1%{?dist}
 Summary:        Sync Fedora CoreOS boot entries and kernels to the EFI System Partition
