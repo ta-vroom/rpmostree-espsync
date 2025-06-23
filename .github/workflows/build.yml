@@ -53,7 +53,7 @@ jobs:
         id: rpm
         uses: naveenrajm7/rpmbuild@master
         with:
-          spec_file: ${PKG_NAME}.spec
+          spec_file: ${{env.PKG_NAME}}.spec
 
       # expose dist / arch from the action’s outputs
       - name: Upload RPM
