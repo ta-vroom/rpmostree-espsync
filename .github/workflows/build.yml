@@ -17,6 +17,9 @@ jobs:
   build_tarball:
     name: Build source archive
     runs-on: ubuntu-latest
+    env:
+      PKG_NAME:  rpmostree-espsync          # <─ matches the real file
+      VERSION:   ${{ github.ref_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
