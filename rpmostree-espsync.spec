@@ -12,7 +12,7 @@ Source0:        esp-sync.sh
 Source1:        esp-sync.service
 Source2:        esp-sync.path
 BuildArch:      noarch
-Requires:       systemd-boot-update # provided by systemd package
+Requires:       systemd
 Requires(post): systemd
 Requires(preun): systemd
 
