@@ -78,12 +78,6 @@ rpm‑ostree deployment.  This package installs the shell script plus a
 systemd path‑activated unit so the copy runs automatically on each reboot
 once a new deployment is finalised.
 
-%prep
-# Nothing to unpack – script & unit files are shipped as sources
-
-%build
-# Nothing to build – pure script + unit
-
 %install
 install -D -m 0755 %{SOURCE0} %{buildroot}/usr/local/bin/esp-sync.sh
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/esp-sync.service
