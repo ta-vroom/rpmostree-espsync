@@ -10,17 +10,14 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env: 
+  PKG_NAME: rpmostree-espsync
+  VERSION:  ${{ github.ref_name }}
+  
 jobs:
-  # This workflow contains a single job called "build"
   build_tarball:
     name: Build source archive
     runs-on: ubuntu-latest
-    env:
-      PKG_NAME:  rpmostree-espsync          # <─ matches the real file
-      VERSION:   ${{ github.ref_name }}
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -39,10 +36,6 @@ jobs:
   build_rpm:
     needs: build_tarball
     runs-on: ubuntu-latest
-    env:
-      PKG_NAME: rpmostree-espsync
-      VERSION:  ${{ github.ref_name }}
-
     steps:
       - uses: actions/checkout@v4
 
@@ -64,10 +57,6 @@ jobs:
   release:
     needs: [ build_tarball, build_rpm ]
     runs-on: ubuntu-latest
-    env:
-      PKG_NAME: rpmostree-espsync
-      VERSION:  ${{ github.ref_name }}
-
     steps:
       - uses: actions/download-artifact@v4
 
