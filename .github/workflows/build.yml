@@ -59,9 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
-
       - uses: softprops/action-gh-release@v1
         with:
           files: |
-            ${PKG_NAME}-${VERSION}.tar.gz
-            ${PKG_NAME}-${VERSION}-1.*.rpm
+            ${{ env.PKG_NAME }}-${{ env.VERSION }}.tar.gz
+            ${{ env.PKG_NAME }}-${{ env.VERSION }}-1.*.rpm
