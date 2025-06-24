@@ -4,6 +4,8 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
+    tags:
+      - 'v*'  # e.g. v0.1, v1.0.0
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
