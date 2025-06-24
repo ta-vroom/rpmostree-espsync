@@ -52,8 +52,16 @@ jobs:
       - name: Upload RPM
         uses: actions/upload-artifact@v4
         with:
-          name: ${PKG_NAME}-${VERSION}-1.${{ steps.rpm.outputs.dist }}.${{ steps.rpm.outputs.arch }}.rpm
-          path: rpmbuild/RPMS/${{ steps.rpm.outputs.arch }}/*.rpm
+          name: ${PKG_NAME}-${VERSION}-1.${{ steps.rpm.outputs.dist }}.noarch.rpm
+          path: rpmbuild/RPMS/noarch/*.rpm
+      - name: Upload RPM
+        if: success() && always()
+        run: |
+          if compgen -G "rpmbuild/RPMS/noarch/*.rpm"; then
+            echo "Found RPM, uploading…"
+          else
+            echo "::warning::No RPM found for upload"
+          fi
   release:
     needs: [ build_tarball, build_rpm ]
     runs-on: ubuntu-latest
