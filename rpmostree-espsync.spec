@@ -5,7 +5,7 @@ Summary:        Sync CoreOS kernel/initramfs to the ESP
 
 License:        MIT
 URL:            https://github.com/ta-vroom/rpmostree-espsync
-Source0:        %{name}-%{version}.tar.gz   # created by git-archive step
+Source0:        rpmostree-espsync.tar.gz
 
 BuildArch:      noarch
 Requires:       systemd >= 220
