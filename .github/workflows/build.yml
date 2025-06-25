@@ -1,6 +1,6 @@
 name: CI
-
-# Controls when the workflow will run
+permissions:
+  contents: write
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
@@ -50,27 +50,25 @@ jobs:
         with:
           spec_file: ${{env.PKG_NAME}}.spec
 
-      # expose dist / arch from the action’s outputs
+      - name: Upload source archive as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-archive
+          path: ${{ env.PKG_NAME }}-${{ env.VERSION }}.tar.gz
+
       - name: Upload RPM
         uses: actions/upload-artifact@v4
         with:
-          name: ${PKG_NAME}-${VERSION}-1.${{ steps.rpm.outputs.dist }}.noarch.rpm
+          name: rpm-package
           path: rpmbuild/RPMS/noarch/*.rpm
-      - name: Upload RPM
-        if: success() && always()
-        run: |
-          if compgen -G "rpmbuild/RPMS/noarch/*.rpm"; then
-            echo "Found RPM, uploading…"
-          else
-            echo "::warning::No RPM found for upload"
-          fi
+
   release:
     needs: [ build_tarball, build_rpm ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
-      - uses: softprops/action-gh-release@v1
+      - name: Upload RPM
+        uses: actions/upload-artifact@v4
         with:
-          files: |
-            ${{ env.PKG_NAME }}-${{ env.VERSION }}.tar.gz
-            ${{ env.PKG_NAME }}-${{ env.VERSION }}-1.*.rpm
+          name: rpm-package
+          path: rpmbuild/RPMS/noarch/*.rpm
+
