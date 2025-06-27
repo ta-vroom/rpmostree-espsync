@@ -21,11 +21,13 @@ vmlinuz & initramfs into the systemd-boot ESP.
 # We’re already inside BUILD/%{name}-%{version}
 install -D -m 0755 esp-sync %{buildroot}%{_bindir}/esp-sync
 install -D -m 0644 esp-sync.service %{buildroot}%{_unitdir}/esp-sync.service
-install -D -m 0644 esp-sync.path %{buildroot}%{_unitdir}/esp-sync.path
+install -D -m 0644 esp-sync.path %{buildroot}%{_unitdir}/esp-sync.service
 
 %files
 %license LICENSE
 %{_bindir}/esp-sync
+%{_unitdir}/esp-sync.service
+%{_unitdir}/esp-sync.service
 
 %changelog
 * Fri Jun 27 2025  Your Name <you@example.com> - 0.1-2
