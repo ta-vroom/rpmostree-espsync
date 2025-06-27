@@ -28,7 +28,9 @@ install -D -m 0644 esp-sync.path %{buildroot}%{_unitdir}/esp-sync.path
 %{_bindir}/esp-sync
 
 %changelog
+* Fri Jun 27 2025  Your Name <you@example.com> - 0.1-2
+- Add systemd helper macros and list unit files in %%files
+- Switch Source0 to %%{name}-%%{version}.tar.gz for easier version bumps
+
 * Mon Jun 23 2025  Your Name <you@example.com> - 0.1-1
 - Initial package
-* Fri Jun 27 2025  Your Name <you@example.com> - 0.1-2
-- Added service and path
