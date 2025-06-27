@@ -1,0 +1,8 @@
+[Unit]
+Description=Copy latest loader entries & kernels to ESP
+After=ostree-finalize-staged.service
+RequiresMountsFor=/boot/efi
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/esp-sync
