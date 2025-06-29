@@ -71,11 +71,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: built-rpm
+          path: ./rpm-out  # Save to a predictable folder
+
       - name: DEBUG
-        run: ls -al ./rpmbuild/RPMS/noarch/
-      - name: Upload RPM
+        run: ls -al ./rpm-out
+
+      - name: Upload RPM to release (or use however you need it)
         uses: actions/upload-artifact@v4
         with:
           name: rpm-package
-          path: rpmbuild/RPMS/noarch/*.rpm
+          path: rpm-out/*.rpm
 
