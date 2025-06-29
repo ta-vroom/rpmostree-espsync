@@ -1,11 +1,11 @@
-Name:           rpmostree-espsync
+Name:           ostree-esp
 Version:        0.1
 Release:        1%{?dist}
 Summary:        Sync CoreOS kernel/initramfs to the ESP
 
 License:        MIT
-URL:            https://github.com/ta-vroom/rpmostree-espsync
-Source0:        rpmostree-espsync.tar.gz
+URL:            https://github.com/ta-vroom/ostree-esp
+Source0:        ostree-esp.tar.gz
 
 BuildArch:      noarch
 Requires:       systemd >= 220
