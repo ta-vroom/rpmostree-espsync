@@ -67,6 +67,10 @@ jobs:
     needs: [ build_tarball, build_rpm ]
     runs-on: ubuntu-latest
     steps:
+      - name: Download built RPM
+        uses: actions/download-artifact@v4
+        with:
+          name: built-rpm
       - name: DEBUG
         run: ls -al ./rpmbuild/RPMS/noarch/
       - name: Upload RPM
