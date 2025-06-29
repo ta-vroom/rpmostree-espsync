@@ -1,19 +1,71 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+DRY_RUN=false
+OVERWRITE=false
+
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run) DRY_RUN=true ;;
+        -f) OVERWRITE=true;; 
+    esac
+done
+
 # 1) figure out which loader directory is active right now
 ACTIVE_DIR="$(readlink -f /boot/loader)" # → /boot/loader.0  or  /boot/loader.1
+ACTIVE_DIR="$(readlink -f /boot/loader)" # → /boot/loader.0 or /boot/loader.1
 echo "Syncing from ${ACTIVE_DIR}"
 
 ESP=/boot/efi                       # already mounted by early boot
+ACTIVE_DIR="$ACTIVE_DIR/entries"
+ESP=/boot/efi
+ENTRIES="$ESP/loader/entries"
+
+# This either outputs the text to a file or echoes it in stdout
+output() {
+    local txt="$2"
+    local file="$1"
+    if [ "$DRY_RUN" = true ]; then
+        echo "$txt"
+    else
+        echo "$txt" >> "$ENTRIES/$file"
+    fi
+}
+
+# already mounted by early boot
 [ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; }
 
 # 2) copy loader.conf and entries
 rsync -a --delete \
       "${ACTIVE_DIR}/"              \
       "${ESP}/loader/"
+echo "Files in $ACTIVE_DIR:"
+for INPUT in "$ACTIVE_DIR"/*; do
+    # Check if it's a file (not a directory)
+    if [ -f "$INPUT" ]; then
+        FILE=$(basename "$INPUT")
+        if [ -f "$ENTRIES/$FILE" ] && [ "$OVERWRITE" = false ]; then
+            echo "Existing entry found in $ENTRIES/$FILE. Use -f to overwrite."
+            exit 1
+        fi
+        echo "$FILE"
+        while IFS= read -r line; do
+            if [[ $LINE == options* ]]; then
+             # This does not do anything
+             # Just included in case options need to be changed
+                # read -ra words <<< "$LINE"
+                output "$FILE" "$LINE"
+            elif [[ $LINE == linux* || $LINE == initrd* ]]; then
+                modified_line="${line//\/boot/}"
+                output "$FILE" "$modified_line"
+            else
+                output "$FILE" "$LINE"
+            fi
+        done < "$INPUT"
+    fi
+done
 
 # 3) be sure the systemd-boot binary itself is current
 bootctl --path="${ESP}" update >/dev/null 2>&1 || true
 
-echo "ESP sync complete."
+echo "ESP sync complete."echo "ESP sync complete."
