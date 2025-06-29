@@ -73,12 +73,11 @@ jobs:
           name: built-rpm
           path: ./rpm-out  # Save to a predictable folder
 
-      - name: DEBUG
-        run: ls -al ./rpm-out
-
-      - name: Upload RPM to release (or use however you need it)
-        uses: actions/upload-artifact@v4
+      - name: Upload RPM to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: rpm-package
-          path: rpm-out/*.rpm
+          files: ./rpm-out/*.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
