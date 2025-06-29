@@ -1,4 +1,4 @@
 [Path]
 # Trigger once per boot when ostree finalises the new deployment
-Unit=esp-sync.service
+Unit=sd-bootc.service
 PathChanged=/run/ostree-booted

@@ -5,4 +5,4 @@ RequiresMountsFor=/boot/efi
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/esp-sync
+ExecStart=/usr/local/bin/sd-bootc
