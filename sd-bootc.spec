@@ -5,7 +5,7 @@ Summary:        Sync CoreOS kernel/initramfs to the ESP
 
 License:        MIT
 URL:            https://github.com/ta-vroom/sd-bootc
-Source0:        ostree-esp.tar.gz
+Source0:        sd-bootc.tar.gz
 
 BuildArch:      noarch
 Requires:       systemd >= 220, rpm-ostree
