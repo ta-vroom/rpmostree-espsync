@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: built-rpm
-          path: ~/rpmbuild/RPMS/noarch/sd-bootc-*.rpm
+          path: ./rpmbuild/RPMS/noarch/sd-bootc-*.rpm
 
   release:
     needs: [ build_tarball, build_rpm ]
