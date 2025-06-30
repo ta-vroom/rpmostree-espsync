@@ -13,7 +13,6 @@ done
 
 # 1) figure out which loader directory is active right now
 ACTIVE_DIR="$(readlink -f /boot/loader)" # → /boot/loader.0  or  /boot/loader.1
-ACTIVE_DIR="$(readlink -f /boot/loader)" # → /boot/loader.0 or /boot/loader.1
 echo "Syncing from ${ACTIVE_DIR}"
 
 ESP=/boot/efi                       # already mounted by early boot
