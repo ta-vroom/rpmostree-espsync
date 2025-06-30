@@ -48,14 +48,14 @@ for INPUT in "$ACTIVE_DIR"/*; do
             exit 1
         fi
         echo "$FILE"
-        while IFS= read -r line; do
+        while IFS= read -r LINE; do
             if [[ $LINE == options* ]]; then
              # This does not do anything
              # Just included in case options need to be changed
                 # read -ra words <<< "$LINE"
                 output "$FILE" "$LINE"
             elif [[ $LINE == linux* || $LINE == initrd* ]]; then
-                modified_line="${line//\/boot/}"
+                modified_line="${LINE//\/boot/}"
                 output "$FILE" "$modified_line"
             else
                 output "$FILE" "$LINE"
