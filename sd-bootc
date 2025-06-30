@@ -34,16 +34,17 @@ output() {
 # already mounted by early boot
 [ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; }
 
-# 2) copy loader.conf and entries
-rsync -a --delete \
-      "${ACTIVE_DIR}/"              \
-      "${ESP}/loader/"
 echo "Files in $ACTIVE_DIR:"
-for INPUT in "$ACTIVE_DIR"/*; do
+for entry in "$ACTIVE_DIR"/ostree-*.conf; do
     # Check if it's a file (not a directory)
     if [ -f "$INPUT" ]; then
-        FILE=$(basename "$INPUT")
-        if [ -f "$ENTRIES/$FILE" ] && [ "$OVERWRITE" = false ] && [ $DRY_RUN = false ]; then
+        INPUT=$(basename "$INPUT")
+        BASE=$(echo "$base_name" | sed -E 's/\+.*//; s/\.conf$//')
+
+        # Allows matching systemd-bless-boot entries
+        OUTPUT=$(find "$ENTRIES" -maxdepth 1 -name "$BASE*.conf" | head -n1)
+
+        if [ -f "$OUTPUT" ] && [ "$OVERWRITE" = false ] && [ $DRY_RUN = false ]; then
             echo "Existing entry found in $ENTRIES/$FILE. Use -f to overwrite."
             exit 1
         fi
@@ -53,14 +54,15 @@ for INPUT in "$ACTIVE_DIR"/*; do
              # This does not do anything
              # Just included in case options need to be changed
                 # read -ra words <<< "$LINE"
-                output "$FILE" "$LINE"
+                output "$OUTPUT" "$LINE"
             elif [[ $LINE == linux* || $LINE == initrd* ]]; then
                 modified_line="${LINE//\/boot/}"
-                output "$FILE" "$modified_line"
+                output "$OUTPUT" "$modified_line"
+            elif [[ $LINE == aboot*  ]]; then
             else
-                output "$FILE" "$LINE"
+                output "$OUTPUT" "$LINE"
             fi
-        done < "$INPUT"
+        done < "$entry"
     fi
 done
 
