@@ -21,13 +21,13 @@ vmlinuz & initramfs into the systemd-boot ESP.
 # We’re already inside BUILD/%{name}-%{version}
 install -D -m 0755 sd-bootc %{buildroot}%{_bindir}/sd-bootc
 install -D -m 0644 sd-bootc.service %{buildroot}%{_unitdir}/sd-bootc.service
-install -D -m 0644 sd-bootc.path %{buildroot}%{_unitdir}/sd-bootc.service
+install -D -m 0644 sd-bootc.path %{buildroot}%{_unitdir}/sd-bootc.path
 
 %files
 %license LICENSE
 %{_bindir}/sd-bootc
 %{_unitdir}/sd-bootc.service
-%{_unitdir}/sd-bootc.service
+%{_unitdir}/sd-bootc.path
 
 %changelog
 * Fri Jun 27 2025  Your Name <you@example.com> - 0.1-2
