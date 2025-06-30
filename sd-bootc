@@ -43,7 +43,7 @@ for INPUT in "$ACTIVE_DIR"/*; do
     # Check if it's a file (not a directory)
     if [ -f "$INPUT" ]; then
         FILE=$(basename "$INPUT")
-        if [ -f "$ENTRIES/$FILE" ] && [ "$OVERWRITE" = false ]; then
+        if [ -f "$ENTRIES/$FILE" ] && [ "$OVERWRITE" = false ] && [ $DRY_RUN = false ]; then
             echo "Existing entry found in $ENTRIES/$FILE. Use -f to overwrite."
             exit 1
         fi
