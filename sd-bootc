@@ -27,8 +27,8 @@ ESP=/boot/efi
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -h|--help)
-            help_txt()
-            exit 0
+            help_txt
+            exit
             ;;
         -i|--input)
             INPUT="$2"
