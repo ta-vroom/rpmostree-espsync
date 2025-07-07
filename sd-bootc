@@ -104,8 +104,8 @@ for entry in "$ENTRIES_IN"/ostree-*.conf; do
             elif [[ $LINE == linux* || $LINE == initrd* ]]; then
                 modified_line="${LINE//\/boot/}"
                 output "$ENTRIES_OUT" "$modified_line"
-            elif [[ $LINE == aboot*  ]]; then
-                :
+            elif [[ $LINE == aboot*  ]]; then 
+                : # Don't copy aboot* (android) lines
             else
                 output "$ENTRIES_OUT" "$LINE"
             fi
