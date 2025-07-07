@@ -7,7 +7,6 @@ FORCE=false
 INPUT=/boot/loader
 ESP=/boot/efi
 
-
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -i|--input)
@@ -47,8 +46,9 @@ output() {
     fi
 }
 
-# already mounted by early boot
-#[ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; }
+if [[ $(uname) == "Linux" ]]; then # Disable ESP checking on non-Linux
+    [ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; } # Expect ESP to be mounted
+fi
 
 echo "Files in $ACTIVE_DIR:"
 for entry in "$ACTIVE_DIR"/ostree-*.conf; do
