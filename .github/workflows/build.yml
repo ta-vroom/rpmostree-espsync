@@ -41,7 +41,8 @@ jobs:
         run: ls -la
       - name: Create source archive
         run: |
-          echo "Creating archive of $PWD"  
+          echo "Creating archive of $PWD"
+          ls -la  
           tar -czf ${{ vars.PKG_NAME }}-${{ github.ref_name }}.tar.gz --transform "s,^,${{ vars.PKG_NAME }}-${{ github.ref_name }}/," *
 
       - name: Upload source archive as artifact
