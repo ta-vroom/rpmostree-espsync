@@ -129,6 +129,7 @@ for entry in "$ENTRIES_IN"/ostree-*.conf; do
             fi
         done < "$entry"
     fi
+    echo
 done
 
 # 3) be sure the systemd-boot binary itself is current
