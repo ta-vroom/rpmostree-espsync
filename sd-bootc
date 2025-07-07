@@ -31,9 +31,9 @@ done
 # 1) figure out which loader directory is active right now
 ACTIVE_DIR="$(readlink -f $INPUT)" # → /boot/loader.0  or  /boot/loader.1
 echo "Syncing from ${ACTIVE_DIR}"
-                 # already mounted by early boot
-ACTIVE_DIR="$ACTIVE_DIR/entries"
-ENTRIES="$ESP/loader/entries"
+
+ENTRIES_IN="$ACTIVE_DIR/entries"
+ENTRIES_OUT="$ESP/loader/entries"
 
 # This either outputs the text to a file or echoes it in stdout
 output() {
@@ -42,7 +42,7 @@ output() {
     if [ "$DRY_RUN" = true ]; then
         echo "$txt"
     else
-        echo "$txt" >> "$ENTRIES/$file"
+        echo "$txt" >> "$ENTRIES_OUT/$file"
     fi
 }
 
@@ -50,9 +50,9 @@ if [[ $(uname) == "Linux" ]]; then # Disable ESP checking on non-Linux
     [ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; } # Expect ESP to be mounted
 fi
 
-echo "Files in $ACTIVE_DIR:"
-for entry in "$ACTIVE_DIR"/ostree-*.conf; do
-    FILE_NAME=$(echo "$entry" | sed -E "s|$ACTIVE_DIR/||g")
+echo "Files in $ENTRIES_IN:"
+for entry in "$ENTRIES_IN"/ostree-*.conf; do
+    FILE_NAME=$(echo "$entry" | sed -E "s|$ENTRIES_IN/||g")
     echo "  $FILE_NAME"
     # Check if it's a file (not a directory)
     if [ -f "$entry" ]; then
@@ -64,7 +64,7 @@ for entry in "$ACTIVE_DIR"/ostree-*.conf; do
         MATCH=$(find "$ESP/leader/entries" -maxdepth 1 -name "$BASE*.conf" | head -n1 2>/dev/null) 
 
         if [ -f "$MATCH" ] && [ "$FORCE" = false ] && [ $DRY_RUN = false ]; then
-            echo "Existing entry found in $ACTIVE_DIR/$FILE. Use -f to overwrite."
+            echo "Existing entry found in $ENTRIES_IN/$FILE. Use -f to overwrite."
             exit 1
         fi
         while IFS= read -r LINE; do
