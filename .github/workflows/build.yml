@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: cargo build -r
       - name: Move binary
-        run: ls -la
+        run: ls -la ./target
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Replace version in RPM spec
