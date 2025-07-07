@@ -23,7 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build
-        run: cargo build --verbose
+        run: cargo build -r
+      - name: Move binary
+        run: mv ./target/release/sdbootc .
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Replace version in RPM spec
