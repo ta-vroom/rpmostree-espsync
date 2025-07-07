@@ -30,7 +30,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Replace version in RPM spec
         run:  sed -Ei "s/^(Version:[[:space:]]*).*/\\1${VERSION}/" ${PKG_NAME}.spec
-
+      - name: DEBUG
+        run: ls -la
       - name: Create source archive
         run: tar -czf ${{ vars.PKG_NAME }}-${{ github.ref_name }}.tar.gz --transform "s,^,${{ vars.PKG_NAME }}-${{ github.ref_name }}/," *
 
