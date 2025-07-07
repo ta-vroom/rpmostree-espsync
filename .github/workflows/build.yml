@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: cargo build -r
       - name: Upload sd-bootc binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sd-bootc
           path: ./target/release/sd-bootc
