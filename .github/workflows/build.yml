@@ -25,7 +25,13 @@ jobs:
       - name: Build
         run: cargo build -r
       - name: Move binary
-        run: mv ./target/release/sd-bootc .
+        run: |
+          if [ -f ./target/release/sd-bootc ]; then
+            mv ./target/release/sd-bootc .
+          else
+            echo "Error: sd-bootc binary not found in target/release"
+            exit 1
+          fi
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Replace version in RPM spec
