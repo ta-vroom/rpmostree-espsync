@@ -17,13 +17,15 @@ env:
   VERSION:  ${{ github.ref_name }}
   
 jobs:
-  build_tarball:
+  build:
     name: Build source archive
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cargo build --verbose
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: Replace version in RPM spec
         run:  sed -Ei "s/^(Version:[[:space:]]*).*/\\1${VERSION}/" ${PKG_NAME}.spec
 
@@ -36,7 +38,7 @@ jobs:
           name: ${{ env.PKG_NAME }}-${{ env.VERSION }}.tar.gz
           path: ${{ env.PKG_NAME }}-${{ env.VERSION }}.tar.gz
   build_rpm:
-    needs: build_tarball
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +66,7 @@ jobs:
           path: ./rpmbuild/RPMS/noarch/sd-bootc-*.rpm
 
   release:
-    needs: [ build_tarball, build_rpm ]
+    needs: [ build, build_rpm ]
     runs-on: ubuntu-latest
     steps:
       - name: Download built RPM
