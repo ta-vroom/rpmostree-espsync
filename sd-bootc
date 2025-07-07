@@ -89,7 +89,7 @@ for entry in "$ENTRIES_IN"/ostree-*.conf; do
         COUNT=$(echo $FILE_NAME | sed -E 's/.*\+([^\.]+)\..*/\1/')
         BASE=$(echo $FILE | sed -E 's/.conf//g')
         # Allows matching systemd-bless-boot entries
-        MATCH=$(find "$ESP/leader/entries" -maxdepth 1 -name "$BASE*.conf" | head -n1 2>/dev/null) 
+        MATCH=$(find "$ESP/loader/entries" -maxdepth 1 -name "$BASE*.conf" | head -n1 2>/dev/null) 
 
         if [ -f "$MATCH" ] && [ "$FORCE" = false ] && [ $DRY_RUN = false ]; then
             echo "Existing entry found in $ENTRIES_IN/$FILE. Use -f to overwrite."
