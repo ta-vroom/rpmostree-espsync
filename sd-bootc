@@ -12,6 +12,7 @@ help_txt() {
             --efi DIR
             --esp DIR          Aliases for --output.
             --dry-run          Perform a trial run with no changes made.
+            --verbose          Verbose
 
         Unknown options will result in an error.
 EOF
@@ -42,6 +43,10 @@ while [[ $# -gt 0 ]]; do
             DRY_RUN=true
             shift
             ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
         *)
             echo "Unknown argument: $1"
             exit 1
@@ -51,8 +56,8 @@ done
 
 # Figure out which loader directory is active right now
 ACTIVE_DIR="$(readlink -f $INPUT)" # → /boot/loader.0  or  /boot/loader.1
-echo "Syncing from ${ACTIVE_DIR}"
 
+[ "$VERBOSE" = true ] || printf "\nSyncing from %s\n\n" "$ACTIVE_DIR"
 # Entry directories
 ENTRIES_IN="$ACTIVE_DIR/entries"
 ENTRIES_OUT="$ESP/loader/entries"
@@ -78,10 +83,23 @@ if [[ $(uname) == "Linux" ]]; then # Disable ESP checking on non-Linux
     [ -d "${ESP}/EFI" ] || { echo "ESP not mounted"; exit 1; } # Expect ESP to be mounted
 fi
 
-echo "Files in $ENTRIES_IN:"
+
+if [ "$VERBOSE" = true ]; then 
+    ENTRIES=()
+    for entry in "$ENTRIES_IN"/ostree-*.conf; do
+        ENTRIES+=("$(basename "$entry")")
+    done
+    
+    printf "\nFiles in %s:\n" $ENTRIES_IN
+    
+    IFS=, 
+    echo "  ${ENTRIES[*]}"
+    unset IFS
+fi
+
 for entry in "$ENTRIES_IN"/ostree-*.conf; do
     FILE_NAME=$(echo "$entry" | sed -E "s|$ENTRIES_IN/||g")
-    echo "  $FILE_NAME"
+    echo "$FILE_NAME"
     # Check if it's a file (not a directory)
     if [ -f "$entry" ]; then
         INPUT=$(basename "$INPUT")
@@ -116,4 +134,4 @@ done
 # 3) be sure the systemd-boot binary itself is current
 bootctl --path="${ESP}" update >/dev/null 2>&1 || true
 
-echo "ESP sync complete."echo "ESP sync complete."
+printf "\nESP sync complete."
