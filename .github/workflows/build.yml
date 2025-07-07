@@ -27,6 +27,7 @@ jobs:
       - name: Move binary
         run: |
           if [ -f ./target/release/sd-bootc ]; then
+            echo "Moving binary to $PWD"
             mv ./target/release/sd-bootc .
           else
             echo "Error: sd-bootc binary not found in target/release"
