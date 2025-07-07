@@ -22,22 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build
-        run: cargo build -r
-      - name: Upload sd-bootc binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: sd-bootc
-          path: ./target/release/sd-bootc
+    
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Replace version in RPM spec
         run:  sed -Ei "s/^(Version:[[:space:]]*).*/\\1${VERSION}/" ${PKG_NAME}.spec
-      - name: Download sd-bootc
-        uses: actions/download-artifact@v4
-        with:
-          name: sd-bootc
-          path: .  # Save to a predictable folder
       - name: Create source archive
         run: |
           echo "Creating archive of $PWD"
