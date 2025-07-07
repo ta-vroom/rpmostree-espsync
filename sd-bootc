@@ -1,14 +1,35 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+help_txt() {
+    cat <<EOF
+        Usage: sd_bootc [OPTIONS]
+
+        Options:
+        -h, --help             Show this help message and exits.
+        -i, --input FILE       Specify the input file to use.
+        -o, --output DIR       Specify the output directory (or EFI/ESP mount point).
+            --efi DIR
+            --esp DIR          Aliases for --output.
+            --dry-run          Perform a trial run with no changes made.
+
+        Unknown options will result in an error.
+EOF
+}
+
 DRY_RUN=false
 FORCE=false
+VERBOSE=false
 
 INPUT=/boot/loader
 ESP=/boot/efi
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        -h|--help)
+            help_txt()
+            exit 0
+            ;;
         -i|--input)
             INPUT="$2"
             shift 2
@@ -28,10 +49,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 1) figure out which loader directory is active right now
+# Figure out which loader directory is active right now
 ACTIVE_DIR="$(readlink -f $INPUT)" # → /boot/loader.0  or  /boot/loader.1
 echo "Syncing from ${ACTIVE_DIR}"
 
+# Entry directories
 ENTRIES_IN="$ACTIVE_DIR/entries"
 ENTRIES_OUT="$ESP/loader/entries"
 
@@ -41,6 +63,12 @@ output() {
     local file="$1"
     if [ "$DRY_RUN" = true ]; then
         echo "$txt"
+    elif [ "$VERBOSE" = true ]; then
+cat <<EOF
+Writing text to file: $file
+  $txt
+EOF
+    echo "$txt" >> "$ENTRIES_OUT/$file"
     else
         echo "$txt" >> "$ENTRIES_OUT/$file"
     fi
