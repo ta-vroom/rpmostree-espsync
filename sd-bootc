@@ -100,14 +100,14 @@ for entry in "$ENTRIES_IN"/ostree-*.conf; do
              # This does not do anything
              # Just included in case options need to be changed
                 # read -ra words <<< "$LINE"
-                output "$OUTPUT" "$LINE"
+                output "$ENTRIES_OUT" "$LINE"
             elif [[ $LINE == linux* || $LINE == initrd* ]]; then
                 modified_line="${LINE//\/boot/}"
-                output "$OUTPUT" "$modified_line"
+                output "$ENTRIES_OUT" "$modified_line"
             elif [[ $LINE == aboot*  ]]; then
                 :
             else
-                output "$OUTPUT" "$LINE"
+                output "$ENTRIES_OUT" "$LINE"
             fi
         done < "$entry"
     fi
